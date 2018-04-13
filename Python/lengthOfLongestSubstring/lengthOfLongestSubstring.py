@@ -17,49 +17,33 @@ class Solution:
 
         return False
 
-    def longestInternalSubString(self, s, main_char):
+    def getCharIdxs(self,s,main_char):
+        return [idx for (idx,char) in enumerate(s) if main_char == char]
+
+    def getPostLength(self,charIdxs):
         """
-        Given the string s and character of that string main_char, 
-        find the length of the longest substring delimited
-        by the character c. Length should be non-inclusive 
-        so do not include second c in determination of length.
-
-        If -1 is returned it means that main_char was not in 
-        the sting s.
+        For each occurence of main_char in s find the sub-string that follows it
+        and includes only a single instance of main_char. Returns the length
+        of the longest substring found. The length of the substring
+        does not include the instance of the main_char itself
         """
-        maximum_length = -1
-        length_counter = 0
-        for char in s:
-            length_counter += 1
-            if not char == main_char:
-                continue
+        if len(charIdxs) <= 1:
+            return len(s)
+            
+        max_length = 0
+        for (idx_idx,idx) in enumerate(charIdxs[0:-1]):
 
-            elif char == main_char:
-                if length_counter > maximum_length:
-                    maximum_length = length_counter - 1
-                length_counter = 1
+            if idx_idx == len(charIdxs) - 2:
+                length = len(s) - idx - 1
+            else: 
+                length = (charIdxs[idx_idx + 2] - idx) - 1
+            if length > max_length:
+                max_length = length
 
-        if length_counter > maximum_length:
-            maximum_length = length_counter
+        return max_length
 
-        return maximum_length
+    def getPreLength(self,charIdxs)
 
-    def longestBeginSubString(self,s):
-        """
-        From the beginning of the string count untill 
-        an element is counted twice
-        """
-        length_count = 0
-        previous_chars = []
-        
-        for char in s:
-            length_count += 1
-            if char in previous_chars:
-                length_count -= 1
-                break
-            previous_chars.append(char)
-
-        return length_count
             
     def lengthOfLongestSubstring(self, s):
         """
@@ -99,7 +83,9 @@ class Solution:
 
 s1 = Solution()
 
-print(s1.lengthOfLongestSubstring("asjrgapa"))
+# print(s1.lengthOfLongestSubstring("asjrgapa"))
+# print(s1.maxMiddleSubString("asjrgapa","a"))
+s1.getPostLength("asargapdterga","a")
 #print(s1.longestInternalSubString("abcb","b"))
 #print(s1.longestBeginSubString("abcb"))
 
