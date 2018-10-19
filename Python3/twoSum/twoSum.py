@@ -7,9 +7,10 @@ class Solution(object):
         """
         
         for first_index, first_number in enumerate(nums):
-            for second_index, second_number in enumerate(nums[first_index:]):
+            for second_index, second_number in enumerate(
+                    nums[first_index + 1:]):
                 if (first_number + second_number) == target:
-                    second_return_index = first_index + second_index
+                    second_return_index = first_index + second_index + 1
                     print(first_index, second_return_index)
                     return [first_index, second_return_index]
 
@@ -17,4 +18,4 @@ class Solution(object):
 
 
 Solution1 = Solution()
-print(Solution1.twoSum([2,10,11,15], 26))
+print(Solution1.twoSum([3,2,4], 6))
