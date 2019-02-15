@@ -1,40 +1,44 @@
 class Solution:
-    def coinChange(self, coins: 'List[int]', amount: 'int') -> 'int':
-        return self.F(coins, amount)
-    
+
     def __init__(self):
-        self.F_memo = {}
-        self.F_memo[0] = 0
+        self.memo = {}
+        self.memo[0] = 0
+    
+    def coinChange(self, coins: 'List[int]', amount: 'int') -> 'int':
+        #memo = [None]*(amount+1)
+        #memo[0] = 0
+        num = self.F(coins, amount, memo)
+        return num
 
 
-    def F(self, coins, amount):
-        try:
-            return self.F_memo[amount]
-        except KeyError:
-            pass
-        if all(amount < c for c in coins):
-            self.F_memo[amount] = -1
-            return -1
+    def F(self, coins, amount, memo):
+        if memo.get(amount) != None: #memo[amount] != None:
+            return memo[amount]
 
-        try: 
-            self.F_memo[amount] = min(
-                [self.F(coins, amount - c) for
-                 c in coins
-                 if self.F(coins, amount - c) != -1]
-            ) + 1
-
-            return self.F_memo[amount]
-        except ValueError:
-            return -1
+        best = amount+1
+        for coin in coins:
+            if amount - coin >= 0:
+                temp = self.F(coins, amount-coin, memo)
+                if temp != -1 and temp < best:
+                    best = temp
+                    
+        if best != amount+1:
+            memo[amount] = best + 1
+            return memo[amount]
+        memo[amount] = -1
+        return -1
 
 
 sol = Solution()
 
 F_tests = [
     ([1,2,5], 100),
+    ([3,4], 5),
+    ([3,4], 10),
     ([3,4], 0),
-    ([3,4], 6),
+    ([3,4], 1),
+    ([186, 419, 83, 408], 6249)
 ]
 
 for test in F_tests:
-    print(sol.F(*test))
+    print(sol.coinChange(*test))
